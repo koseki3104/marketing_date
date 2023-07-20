@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from marketing_data_analytics.views import top_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', top_page, name='top_page'),
 ]
