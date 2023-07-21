@@ -7,10 +7,8 @@
 </head>
 <body>
     <h1>アンケートページ</h1>
-    <form method="post">
+        <form method="post" action="{% url 'save_data' %}">
         {% csrf_token %}
-        <label for="name">名前:</label>
-        <input type="text" name="name" required><br>
 
         <label for="age">年齢:</label>
         <input type="number" name="age" min="1" required><br>
@@ -58,8 +56,8 @@
             <option value="4">4</option>
             <option value="5">5</option>
         </select><br>
-        <label for="spocial_satisfaction">接客の満足度:</label>
-        <select name="special_satisfaction" required>
+        <label for="service_satisfaction">接客の満足度:</label>
+        <select name="service_satisfaction" required>
             <option value="">選択してください</option>
             <option value="1">1</option>
             <option value="2">2</option>
