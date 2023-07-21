@@ -11,3 +11,4 @@ python-dotenv==0.21.0
 sqlparse==0.4.3
 static3==0.7.0
 whitenoise==6.2.0
+openpyxl==3.1.2
