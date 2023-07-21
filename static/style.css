@@ -45,7 +45,6 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 25px;
-  background: url('down-arrow.png') no-repeat right center;
   background-size: 16px;
 }
 
