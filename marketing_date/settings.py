@@ -34,7 +34,6 @@ DEBUG = False # デプロイ時、Falseに修正
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 INSTALLED_APPS = [
