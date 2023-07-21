@@ -3,9 +3,75 @@
 <html>
 <head>
     <title>トップページ</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body>
-    <p>ハローワールド</p>
+    <h1>アンケートページ</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">名前:</label>
+        <input type="text" name="name" required><br>
+
+        <label for="age">年齢:</label>
+        <input type="number" name="age" min="1" required><br>
+
+        <label for="gender">性別:</label>
+        <select name="gender" required>
+            <option value="">選択してください</option>
+            <option value="M">男性</option>
+            <option value="F">女性</option>
+        </select><br>
+
+        <label for="overall_satisfaction">全体の満足度:</label>
+        <select name="overall_satisfaction" required>
+            <option value="">選択してください</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        <label for="food_satisfaction">味の満足度:</label>
+        <select name="food_satisfaction" required>
+            <option value="">選択してください</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        <label for="price_satisfaction">価格の満足度:</label>
+        <select name="price_satisfaction" required>
+            <option value="">選択してください</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        <label for="ambience_satisfaction">店の雰囲気の満足度:</label>
+        <select name="ambience_satisfaction" required>
+            <option value="">選択してください</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        <label for="spocial_satisfaction">接客の満足度:</label>
+        <select name="special_satisfaction" required>
+            <option value="">選択してください</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+
+        <label for="other_comments">自由記述:</label><br>
+        <textarea name="other_comments" cols="30" rows="4"></textarea><br>
+
+        <input type="submit" value="送信">
+    </form>
 </body>
 </html>

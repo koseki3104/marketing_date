@@ -1,4 +1,65 @@
-body{
-  color: red;
-  background-color: blue;
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 20px;
+  background-color: #e6f0ff;
+}
+
+h1 {
+  color: #007BFF; 
+  text-align: center;
+  font-size: 36px; 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  color: #555;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; 
+}
+
+input[type="submit"] {
+  background-color: #007BFF;
+  color: #fff;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 25px;
+  background: url('down-arrow.png') no-repeat right center;
+  background-size: 16px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+form {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
 }
