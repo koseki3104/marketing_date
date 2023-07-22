@@ -81,11 +81,11 @@ def export_to_excel(request):
                 set_cell_color(cell, "ADD8E6")  # 負の相関でもう少し濃い青に設定
             elif value < -0.3:
                 set_cell_color(cell, "B0C4DE")  # 負の相関でさらに薄い青に設定
-            elif value < 0.3:
+            elif 0.3 <= value < 0.5:
                 set_cell_color(cell, "FF6347")  # 正の相関でオレンジ色に設定
-            elif value < 0.5:
+            elif 0.3 <= value < 0.7:
                 set_cell_color(cell, "FF4500")  # 正の相関で金色に設定
-            elif value < 0.7:
+            elif 0.7 <= value < 0.99:
                 set_cell_color(cell, "FF0000")  # 正の相関でダークオレンジ色に設定
 
     week_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+3, column=2)  
