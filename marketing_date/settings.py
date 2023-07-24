@@ -13,6 +13,7 @@ import os
 import environ
 from decouple import config
 from dj_database_url import parse as bdurl
+from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
