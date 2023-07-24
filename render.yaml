@@ -1,13 +1,15 @@
 databases:
-  - name: mysite
-    databaseName: mysite
+  - name: review_db
+    databaseName: review_db
     user: mysite
+    region: singapore
+    plan: free
     region: singapore
     plan: free
 
 services:
   - type: web
-    name: mysite
+    name: marketing_date
     env: python
     region: singapore
     plan: free
