@@ -112,37 +112,37 @@ def export_to_excel(request):
                 elif value < -0.5:
                     set_cell_color(cell, "ADD8E6")  # 負の相関でもう少し濃い青に設定
                 elif value < -0.3:
-                    set_cell_color(cell, "B0C4DE")  # 負の相関でさらに薄い青に設定
+                    set_cell_color(cell, "E0F8FF")  # 負の相関でさらに薄い青に設定
                 elif 0.3 <= value < 0.5:
-                    set_cell_color(cell, "FF6347")  # 正の相関でオレンジ色に設定
+                    set_cell_color(cell, "FFEBEB")  # 正の相関でオレンジ色に設定
                 elif 0.3 <= value < 0.7:
-                    set_cell_color(cell, "FF4500")  # 正の相関で金色に設定
+                    set_cell_color(cell, "FFB6B6")  # 正の相関で金色に設定
                 elif 0.7 <= value < 0.99:
-                    set_cell_color(cell, "FF0000")  # 正の相関でダークオレンジ色に設定
+                    set_cell_color(cell, "FF8282")  # 正の相関でダークオレンジ色に設定
 
         week_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+3, column=2)  
-        week_correlation_cell.value = "相関係数-0.3以上-0.5未満で弱い負の相関"
-        set_cell_color(week_correlation_cell, "B0C4DE")  # 負の相関でトマト色に設定
+        week_correlation_cell.value = "相関係数-0.3以下-0.5より大きいで弱い負の相関"
+        set_cell_color(week_correlation_cell, "E0F8FF")  # 負の相関で薄い青色に設定
 
         normal_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+4, column=2)
-        normal_correlation_cell.value = "相関係数-0.5以上-0.7未満で普通の負の相関"
-        set_cell_color(normal_correlation_cell, "ADD8E6")  # 負の相関で橙赤に設定
+        normal_correlation_cell.value = "相関係数-0.5以下-0.7より大きいで普通の負の相関"
+        set_cell_color(normal_correlation_cell, "ADD8E6")  # 負の相関で青色に設定
 
         strong_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+5, column=2)
-        strong_correlation_cell.value = "相関係数-0.7以上で強い負の相関"
-        set_cell_color(strong_correlation_cell, "6495ED")  # 負の相関で濃い赤に設定
+        strong_correlation_cell.value = "相関係数-0.7以下で強い負の相関"
+        set_cell_color(strong_correlation_cell, "6495ED")  # 負の相関で濃い青に設定
 
         strong_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+6, column=2)
         strong_positive_correlation_cell.value = "相関係数0.7以上で強い正の相関"
-        set_cell_color(strong_positive_correlation_cell, "FF0000")  # 正の相関でダークオレンジ色に設定
+        set_cell_color(strong_positive_correlation_cell, "FF8282")  # 正の相関でダークオレンジ色に設定
 
         normal_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+7, column=2)
         normal_positive_correlation_cell.value = "相関係数0.5以上0.7未満で普通の正の相関"
-        set_cell_color(normal_positive_correlation_cell, "FF4500")  # 正の相関でオレンジ色に設定
+        set_cell_color(normal_positive_correlation_cell, "FFB6B6")  # 正の相関でオレンジ色に設定
 
         weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
         weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
-        set_cell_color(weak_positive_correlation_cell, "FF6347")  # 正の相関で金色に設定
+        set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で金色に設定
 
     # ファイルをダウンロードさせるResponseオブジェクトを作成
     with open(file_path, 'rb') as file:
