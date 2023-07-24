@@ -23,16 +23,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)gp&(qg=6!)+cw4m_&4md7eefe*tz_1qm^fq8eon!5j6@99o)a'
+# SECRET_KEY = 'django-insecure-)gp&(qg=6!)+cw4m_&4md7eefe*tz_1qm^fq8eon!5j6@99o)a'
+from django.core.management.utils import get_random_secret_key
+SECRET_KEY = get_random_secret_key()  
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # デプロイ時、Falseに修正
+DEBUG = False # デプロイ時、Falseに修正
 #DEBUG = True
 #if not DEBUG:
     #import django_heroku
     #django_heroku.settings(locals())
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '.pythonanywhere.com', 'koseki3104.pythonanywhere.com']
+
 
 # Application definition
 
@@ -135,3 +138,11 @@ SECRET_KEY = os.getenv('SECREST_KEY') # .env内の環境変数を取得
 SUPERUSER_NAME = os.getenv('SUPERUSER_NAME')
 SUPERUSER_EMAIL = os.getenv('SUPERUSER_EMAIL')
 SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+try:
+    from .local_settings import *
+except:
+    pass
