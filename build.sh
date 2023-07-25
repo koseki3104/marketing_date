@@ -2,8 +2,14 @@
 # exit on error
 set -o errexit
 
-# キャッシュの削除
-rmdir /s /q %userprofile%\.cache\matplotlib
+# キャッシュの削除（WindowsとLinuxで条件分岐）
+if [ "$OSTYPE" = "msys" ] || [ "$OSTYPE" = "cygwin" ]; then
+    # Windowsの場合
+    rmdir /s /q %userprofile%\.cache\matplotlib
+else
+    # Linux/Unixの場合
+    rm -rf ~/.cache/matplotlib/*
+fi
 
 # 必要なパッケージのインストール
 pip install -r requirements.txt
