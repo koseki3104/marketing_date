@@ -8,9 +8,12 @@ MARKETING_DATA_ANALYTICS
 https://marketing-date-production.onrender.com
 
 # テスト用アカウント
-・Basic認証パスワード：admin
-・Basic認証ID：2222
+・Basic認証パスワード：admin 
+ 
+・Basic認証ID：2222 
+
 ・スーパーユーザー名：admin
+
 ・スーパーユーザーパスワード：password
 
 # 利用方法
@@ -46,17 +49,26 @@ https://gyazo.com/102c8ebbef4d9703c797d76a3fe60e07
 
 # 開発環境
 Python
+
 Django
+
 GitHub
+
 Render
+
 Visual Studio Code
+
 Excel
 
 # ローカルでの動作方法
 % git clone https://github.com/koseki3104/marketing_date
+
 %cd marketing_date
+
 %pip install virtualenv
+
 %myenv\Scripts\activate
+
 %python manage.py runserver
 
 # 工夫したポイント
