@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 from django.shortcuts import render
 from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image
@@ -67,6 +68,7 @@ def success_page(request):
     return render(request, 'success_page.html')
 
 def export_to_excel(request):
+    fm._rebuild()
     data = Review.objects.all()
 
     # データをPandas DataFrameに変換
