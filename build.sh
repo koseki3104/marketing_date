@@ -3,7 +3,7 @@
 set -o errexit
 
 # キャッシュの削除
-rm -rf ~/.cache/matplotlib/*
+rmdir /s /q %userprofile%\.cache\matplotlib
 
 # 必要なパッケージのインストール
 pip install -r requirements.txt
