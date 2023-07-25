@@ -11,6 +11,7 @@ from django.conf import settings
 from .models import Review
 
 def create_scatter_plot(x_data, y_data, x_label, y_label):
+    # 散布図を作成する関数
     fig, ax = plt.subplots()
     ax.scatter(x_data, y_data)
     ax.set_xlabel(x_label)
@@ -57,7 +58,7 @@ def save_data(request):
 
         return render(request, 'success_page.html')
     else:
-        return HttpResponse("Invalid request method. Please use POST.")
+        return HttpResponse("無効なリクエストメソッドです。POSTメソッドを使用してください。")
 
 def success_page(request):
     return render(request, 'success_page.html')
