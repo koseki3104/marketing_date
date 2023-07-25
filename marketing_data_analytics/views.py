@@ -154,4 +154,3 @@ def export_to_excel(request):
         response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
 
     return response
-
