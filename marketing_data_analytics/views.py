@@ -1,3 +1,5 @@
+from pycaret.classification import *
+import japanize_matplotlib  # japanize-matplotlibパッケージがインストールされていることを確認してください
 import matplotlib.pyplot as plt
 from django.shortcuts import render
 from openpyxl import Workbook, load_workbook
