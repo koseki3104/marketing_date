@@ -20,6 +20,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_ROOT = BASE_DIR / 'media'
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
 
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR,".env"))
