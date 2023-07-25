@@ -68,7 +68,6 @@ def success_page(request):
     return render(request, 'success_page.html')
 
 def export_to_excel(request):
-    fm._rebuild()
     data = Review.objects.all()
 
     # データをPandas DataFrameに変換
