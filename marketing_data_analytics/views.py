@@ -11,11 +11,6 @@ from django.conf import settings
 from .models import Review
 
 def create_scatter_plot(x_data, y_data, x_label, y_label):
-    import matplotlib as mpl
-    
-    # 日本語フォントを指定
-    mpl.rcParams['font.family'] = 'IPAGothic'  # 使いたいフォント名に置き換えてください
-    
     fig, ax = plt.subplots()
     ax.scatter(x_data, y_data)
     ax.set_xlabel(x_label)
@@ -27,8 +22,7 @@ def create_scatter_plot(x_data, y_data, x_label, y_label):
     plt.savefig(img_data, format='png')
     plt.close()
 
-    # ファイルポインタを先頭に戻す
-    img_data.seek(0)
+    img_data.seek(0)  # ファイルポインタを先頭に戻す
 
     return img_data
 
