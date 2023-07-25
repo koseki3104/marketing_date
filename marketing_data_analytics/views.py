@@ -11,6 +11,9 @@ from django.conf import settings
 from .models import Review
 
 def create_scatter_plot(x_data, y_data, x_label, y_label):
+    # フォントの設定
+    plt.rcParams['font.sans-serif'] = ['Arial']
+
     # 散布図を作成する関数
     fig, ax = plt.subplots()
     ax.scatter(x_data, y_data)
