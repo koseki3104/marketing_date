@@ -5,6 +5,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image
 from openpyxl.styles import PatternFill
 import pandas as pd
+import numpy as np
 import os
 import io
 from django.http import HttpResponse
@@ -84,7 +85,6 @@ def export_to_excel(request):
     # 相関行列を計算
     correlation_matrix = numerical_data_df.corr().round(2)
 
-    # デモグラフィックデータを取得
     demographic_data = data_df[['gender', 'age']]
 
     # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
@@ -92,14 +92,29 @@ def export_to_excel(request):
     total_count = demographic_analysis['人数'].sum()
     demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
 
-    # Excelファイルに平均値、相関行列、デモグラフィックデータを出力（ファイル名を変更）
+    # 全ての客層を表現するDataFrameを作成
+    genders = ['男性', '女性']
+    ages = [f'{i}代' for i in range(10, 90, 10)]
+    all_demographics = pd.DataFrame([(gender, age) for gender in genders for age in ages], columns=['gender', 'age'])
+
+    # age列を文字列に変換
+    demographic_analysis['age'] = demographic_analysis['age'].astype(str)
+
+    # デモグラフィック分析結果をマージして欠損値を埋める
+    result_df = pd.merge(all_demographics, demographic_analysis, how='left', on=['age', 'gender'])
+    result_df['人数'] = result_df['人数'].fillna(0)
+    result_df['全体の割合'] = result_df['全体の割合'].fillna(0)
+
+    # Excelファイルに出力（ファイル名を変更）
     file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-        average_data.to_excel(writer, sheet_name='Average') 
+        average_data.to_excel(writer, sheet_name='Average')
         correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
-        demographic_analysis.to_excel(writer, sheet_name='DemographicAnalysis')  # デモグラフィック分析結果を新しいシートに出力
+    
+    # デモグラフィック分析結果を出力
+        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # 追記する部分
 
-        # 散布図を追加していく処理
+    # 散布図を追加していく処理
         scatter_plots = {
             '料理の満足度': numerical_data_df['food_satisfaction'],
             '価格の満足度': numerical_data_df['price_satisfaction'],
