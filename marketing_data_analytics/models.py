@@ -16,6 +16,9 @@ class Review(models.Model):
     # 性別
     GENDER_CHOICES = (('', '選択してください'),('M', '男性'),('F', '女性'),) 
     gender = models.CharField(choices=GENDER_CHOICES, max_length=2)
+    # メニュー
+    MENU_CHOICES = (('', '選択してください'),('S', 'そば'),('U', 'うどん'),('R', 'ラーメン')) 
+    menu = models.CharField(choices=MENU_CHOICES, max_length=2)
     # 全体の満足度
     SATISFACTION_CHOICES = (('', '選択してください'),(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5'),)
     overall_satisfaction = models.IntegerField(choices=SATISFACTION_CHOICES, validators=[MinValueValidator(1), MaxValueValidator(5)])
