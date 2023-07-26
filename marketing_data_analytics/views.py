@@ -39,6 +39,7 @@ def save_data(request):
         form = request.POST
         age = form.get('age')
         gender = form.get('gender')
+        menu = form.get('menu')
         overall_satisfaction = form.get('overall_satisfaction')
         food_satisfaction = form.get('food_satisfaction')
         price_satisfaction = form.get('price_satisfaction')
@@ -50,6 +51,7 @@ def save_data(request):
         data = {
             'age': age,
             'gender': gender,
+            'menu':menu,
             'overall_satisfaction': overall_satisfaction,
             'food_satisfaction': food_satisfaction,
             'price_satisfaction': price_satisfaction,
