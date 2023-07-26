@@ -12,6 +12,10 @@ from django.http import HttpResponse
 from django.conf import settings
 from .models import Review
 
+# 年齢を代表的な年齢区間に変換する関数
+def convert_to_age_group(age):
+    return f'{age // 10 * 10}代'
+
 def create_scatter_plot(x_data, y_data, x_label, y_label):
     # フォントの設定
     plt.rcParams['font.sans-serif'] = ['Arial']
@@ -52,7 +56,7 @@ def save_data(request):
         data = {
             'age': age,
             'gender': gender,
-            'menu':menu,
+            'menu': menu,
             'overall_satisfaction': overall_satisfaction,
             'food_satisfaction': food_satisfaction,
             'price_satisfaction': price_satisfaction,
@@ -85,14 +89,18 @@ def export_to_excel(request):
     # 相関行列を計算
     correlation_matrix = numerical_data_df.corr().round(2)
 
+    # デモグラフィックデータを準備
     demographic_data = data_df[['gender', 'age']]
+    demographic_data['age'] = demographic_data['age'].apply(convert_to_age_group)
+    demographic_data['age'] = demographic_data['age'].astype(str)  # age列を文字列に変換
 
     # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
     demographic_analysis = demographic_data.groupby(['gender', 'age']).size().reset_index(name='人数')
     total_count = demographic_analysis['人数'].sum()
     demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
 
-    # 全ての客層を表現するDataFrameを作成
+    # ここから新たに追加
+    # すべての客層を表現するDataFrameを作成
     genders = ['男性', '女性']
     ages = [f'{i}代' for i in range(10, 90, 10)]
     all_demographics = pd.DataFrame([(gender, age) for gender in genders for age in ages], columns=['gender', 'age'])
@@ -110,11 +118,9 @@ def export_to_excel(request):
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
         average_data.to_excel(writer, sheet_name='Average')
         correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
-    
-    # デモグラフィック分析結果を出力
-        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # 追記する部分
+        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # デモグラフィック分析結果を出力
 
-    # 散布図を追加していく処理
+        # 散布図を追加していく処理
         scatter_plots = {
             '料理の満足度': numerical_data_df['food_satisfaction'],
             '価格の満足度': numerical_data_df['price_satisfaction'],
