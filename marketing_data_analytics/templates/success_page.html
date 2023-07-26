@@ -3,11 +3,15 @@
 <html>
 <head>
     <title>Thank You</title>
-    <!-- <link rel="stylesheet" href="/static/style.css?v=2"> -->
+    <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 
 <body>
-    <h1>アンケートへの回答をありがとうございます</h1>
-    <p>回答を受け付けました。ありがとうございました。</p>
+    <div class="container">
+        <div class="content">
+          <h1>アンケートへの回答ありがとうございました</h1>
+        </div>
+      </div>
+    {% csrf_token %}
 </body>
 </html>
