@@ -84,11 +84,20 @@ def export_to_excel(request):
     # 相関行列を計算
     correlation_matrix = numerical_data_df.corr().round(2)
 
-    # Excelファイルに平均値と相関行列を出力（ファイル名を変更）
+    # デモグラフィックデータを取得
+    demographic_data = data_df[['gender', 'age']]
+
+    # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
+    demographic_analysis = demographic_data.groupby(['gender', 'age']).size().reset_index(name='人数')
+    total_count = demographic_analysis['人数'].sum()
+    demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
+
+    # Excelファイルに平均値、相関行列、デモグラフィックデータを出力（ファイル名を変更）
     file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-        average_data.to_excel(writer, sheet_name='Average')
+        average_data.to_excel(writer, sheet_name='Average') 
         correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
+        demographic_analysis.to_excel(writer, sheet_name='DemographicAnalysis')  # デモグラフィック分析結果を新しいシートに出力
 
         # 散布図を追加していく処理
         scatter_plots = {
