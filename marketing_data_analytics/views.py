@@ -5,7 +5,6 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image
 from openpyxl.styles import PatternFill
 import pandas as pd
-import numpy as np
 import os
 import io
 from django.http import HttpResponse
@@ -17,8 +16,8 @@ def convert_to_age_group(age):
     return f'{age // 10 * 10}代'
 
 def create_scatter_plot(x_data, y_data, x_label, y_label):
-    # フォントの設定
-    plt.rcParams['font.sans-serif'] = ['Arial']
+    # 以前のフォントの設定をクリアしてデフォルトのサンセリフフォントを使用
+    plt.rcParams['font.sans-serif'] = []
 
     # 散布図を作成する関数
     fig, ax = plt.subplots()
@@ -92,26 +91,40 @@ def export_to_excel(request):
     # デモグラフィックデータを準備
     demographic_data = data_df[['gender', 'age']]
     demographic_data['age'] = demographic_data['age'].apply(convert_to_age_group)
-    demographic_data['age'] = demographic_data['age'].astype(str)  # age列を文字列に変換
+    print(demographic_data)
 
     # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
-    demographic_analysis = demographic_data.groupby(['gender', 'age']).size().reset_index(name='人数')
-    total_count = demographic_analysis['人数'].sum()
-    demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
+    demographic_analysis = demographic_data.groupby(['gender', 'age']).size()
+    total_count = demographic_analysis.sum()
+    demographic_analysis = demographic_analysis.reset_index(name='人数')
 
-    # ここから新たに追加
-    # すべての客層を表現するDataFrameを作成
+    demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
+    print(demographic_analysis)
+
+# すべての客層を表現するDataFrameを作成
     genders = ['男性', '女性']
     ages = [f'{i}代' for i in range(10, 90, 10)]
     all_demographics = pd.DataFrame([(gender, age) for gender in genders for age in ages], columns=['gender', 'age'])
 
-    # age列を文字列に変換
-    demographic_analysis['age'] = demographic_analysis['age'].astype(str)
+# 欠損値を補完する
+    missing_rows = []
+    for gender in genders:
+        for age in ages:
+            if not ((demographic_analysis['gender'] == gender) & (demographic_analysis['age'] == age)).any():
+                missing_rows.append({'gender': gender, 'age': age, '人数': 0, '全体の割合': 0})
 
-    # デモグラフィック分析結果をマージして欠損値を埋める
+    if missing_rows:
+        missing_df = pd.DataFrame(missing_rows)
+        demographic_analysis = pd.concat([demographic_analysis, missing_df])
+
+# デモグラフィック分析結果をマージ
     result_df = pd.merge(all_demographics, demographic_analysis, how='left', on=['age', 'gender'])
     result_df['人数'] = result_df['人数'].fillna(0)
     result_df['全体の割合'] = result_df['全体の割合'].fillna(0)
+    # データを年代でソート
+    result_df['age'] = pd.Categorical(result_df['age'], categories=ages, ordered=True)
+    result_df.sort_values(['gender', 'age'], inplace=True)
+    result_df.reset_index(drop=True, inplace=True)
 
     # Excelファイルに出力（ファイル名を変更）
     file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
