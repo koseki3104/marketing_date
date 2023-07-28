@@ -19,8 +19,8 @@ from .models import Review
 import japanize_matplotlib
 
 # 年齢を代表的な年齢区間に変換する関数
-def convert_to_age_group(age):
-    return f'{age // 10 * 10}代'
+def convert_to_age_group(age_series):
+    return age_series.apply(lambda age: f'{age // 10 * 10}代')
 
 def create_scatter_plot(x_data, y_data, x_label, y_label):
     # 以前のフォントの設定をクリアしてデフォルトのサンセリフフォントを使用
@@ -96,10 +96,9 @@ def export_to_excel(request):
     correlation_matrix = numerical_data_df.corr().round(2)
 
     # デモグラフィックデータを準備
-    demographic_data = data_df[['gender', 'age']]
-    demographic_data['age'] = demographic_data['age'].apply(convert_to_age_group)
+    demographic_data = data_df[['gender', 'age']].copy()
+    demographic_data['age'] = convert_to_age_group(demographic_data['age'])
     print(demographic_data)
-
     # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
     demographic_analysis = demographic_data.groupby(['gender', 'age']).size()
     total_count = demographic_analysis.sum()
