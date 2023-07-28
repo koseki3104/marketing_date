@@ -18,6 +18,7 @@ from django.conf import settings
 from .models import Review
 import japanize_matplotlib
 
+
 # 年齢を代表的な年齢区間に変換する関数
 def convert_to_age_group(age_series):
     return age_series.apply(lambda age: f'{age // 10 * 10}代')
@@ -190,15 +191,15 @@ def export_to_excel(request):
 
         strong_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+6, column=2)
         strong_positive_correlation_cell.value = "相関係数0.7以上で強い正の相関"
-        set_cell_color(strong_positive_correlation_cell, "FF8282")  # 正の相関でダークオレンジ色に設定
+        set_cell_color(strong_positive_correlation_cell, "FF8282")  # 正の相関で濃い赤色に設定
 
         normal_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+7, column=2)
         normal_positive_correlation_cell.value = "相関係数0.5以上0.7未満で普通の正の相関"
-        set_cell_color(normal_positive_correlation_cell, "FFB6B6")  # 正の相関でオレンジ色に設定
+        set_cell_color(normal_positive_correlation_cell, "FFB6B6")  # 正の相関で赤色に設定
 
         weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
         weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
-        set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で金色に設定
+        set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
 
     # ファイルをダウンロードさせるResponseオブジェクトを作成
     with open(file_path, 'rb') as file:
