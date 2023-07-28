@@ -98,14 +98,14 @@ def export_to_excel(request):
     # デモグラフィックデータを準備
     demographic_data = data_df[['gender', 'age']].copy()
     demographic_data['age'] = convert_to_age_group(demographic_data['age'])
-    print(demographic_data)
+    # print(demographic_data)
     # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
     demographic_analysis = demographic_data.groupby(['gender', 'age']).size()
     total_count = demographic_analysis.sum()
     demographic_analysis = demographic_analysis.reset_index(name='人数')
 
     demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
-    print(demographic_analysis)
+    # print(demographic_analysis)
 
 # すべての客層を表現するDataFrameを作成
     genders = ['男性', '女性']
