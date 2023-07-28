@@ -1,4 +1,10 @@
 import matplotlib.pyplot as plt
+
+# 日本語フォントを指定してフォント設定
+plt.rcParams['font.sans-serif'] = ['Yu Gothic', 'Meiryo', 'Takao', 'IPAexGothic', 'IPAPGothic', 'VL PGothic', 'Noto Sans CJK JP']
+plt.rcParams['axes.unicode_minus'] = False  # マイナス記号が文字化けするのを防ぐ
+
+# 以降のコードはそのまま
 import matplotlib.font_manager as fm
 from django.shortcuts import render
 from openpyxl import Workbook, load_workbook
@@ -10,6 +16,7 @@ import io
 from django.http import HttpResponse
 from django.conf import settings
 from .models import Review
+import japanize_matplotlib
 
 # 年齢を代表的な年齢区間に変換する関数
 def convert_to_age_group(age):
