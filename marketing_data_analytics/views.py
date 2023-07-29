@@ -120,6 +120,7 @@ def export_to_excel(request):
             if not ((demographic_analysis['gender'] == gender) & (demographic_analysis['age'] == age)).any():
                 missing_rows.append({'gender': gender, 'age': age, '人数': 0, '全体の割合': 0})
 
+# デモグラフィック分析結果をマージ
     if missing_rows:
         missing_df = pd.DataFrame(missing_rows)
         demographic_analysis = pd.concat([demographic_analysis, missing_df])
