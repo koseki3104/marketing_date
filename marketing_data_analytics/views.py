@@ -203,8 +203,9 @@ def export_to_excel(request):
         set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
 
     # ファイルをダウンロードさせるResponseオブジェクトを作成
-    with open(file_path, 'rb') as file:
-        response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
+    # with open(file_path, 'rb') as file:
+    #     response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    #     response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
 
-    return response
+    # return response
+    return HttpResponse("エクセルファイルの出力完了")
