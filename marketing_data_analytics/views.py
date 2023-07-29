@@ -163,6 +163,7 @@ def export_to_excel(request):
             def set_cell_color(cell, color):
                 cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
 
+            '''
             for row in sheet.iter_rows(min_row=2, max_row=correlation_matrix.shape[0]+1, min_col=2, max_col=correlation_matrix.shape[1]+1):
                 for cell in row:
                     value = cell.value
@@ -178,6 +179,7 @@ def export_to_excel(request):
                         set_cell_color(cell, "FFB6B6")  # 正の相関で金色に設定
                     elif 0.7 <= value < 0.99:
                         set_cell_color(cell, "FF8282")  # 正の相関でダークオレンジ色に設定
+                        '''
 
             week_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+3, column=2)  
             week_correlation_cell.value = "相関係数-0.3以下-0.5より大きいで弱い負の相関"
@@ -202,13 +204,13 @@ def export_to_excel(request):
             weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
             weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
             set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
+        # ファイルをダウンロードさせるResponseオブジェクトを作成
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
+
+        return response
+    # return HttpResponse("エクセルファイルの出力完了")
     except Exception as e:
         return HttpResponse(e)
 
-        # ファイルをダウンロードさせるResponseオブジェクトを作成
-        # with open(file_path, 'rb') as file:
-        #     resp  onse = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        #     response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
-
-        # return response
-    return HttpResponse("エクセルファイルの出力完了")
