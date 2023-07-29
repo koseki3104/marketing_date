@@ -135,7 +135,7 @@ def export_to_excel(request):
     result_df.reset_index(drop=True, inplace=True)
 
     # Excelファイルに出力（ファイル名を変更）
-    file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
+    '''file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
         average_data.to_excel(writer, sheet_name='Average')
         correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
@@ -200,7 +200,7 @@ def export_to_excel(request):
 
         weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
         weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
-        set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
+        set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定'''
 
     # ファイルをダウンロードさせるResponseオブジェクトを作成
     # with open(file_path, 'rb') as file:
