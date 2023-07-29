@@ -24,15 +24,16 @@ if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
 
 env = environ.Env()
-env.read_env(os.path.join(BASE_DIR,".env"))
+environ.Env.read_env()
+# env.read_env(os.path.join(BASE_DIR,".env"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)gp&(qg=6!)+cw4m_&4md7eefe*tz_1qm^fq8eon!5j6@99o)a'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False# デプロイ時、Falseに修正
+DEBUG = True# デプロイ時、Falseに修正
 #DEBUG = True
 #if not DEBUG:
     #import django_heroku
@@ -139,6 +140,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SUPERUSER_NAME = env('SUPERUSER_NAME')
-SUPERUSER_EMAIL = env('SUPERUSER_EMAIL')
-SUPERUSER_PASSWORD = env('SUPERUSER_PASSWORD')
+SUPERUSER_NAME = config('SUPERUSER_NAME', default='admin')
+SUPERUSER_EMAIL = config('SUPERUSER_EMAIL', default='admin@example.com')
+SUPERUSER_PASSWORD = config('SUPERUSER_PASSWORD', default='password')
