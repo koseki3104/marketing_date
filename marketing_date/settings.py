@@ -35,7 +35,7 @@ load_dotenv()
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True# デプロイ時、Falseに修正
+DEBUG = False# デプロイ時、Falseに修正
 #DEBUG = True
 #if not DEBUG:
     #import django_heroku
