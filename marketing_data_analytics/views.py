@@ -17,6 +17,8 @@ from django.http import HttpResponse
 from django.conf import settings
 from .models import Review
 import japanize_matplotlib
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
 
 
 # 年齢を代表的な年齢区間に変換する関数
@@ -81,6 +83,18 @@ def save_data(request):
 def success_page(request):
     return render(request, 'success_page.html')
 
+# @user_passes_testデコレータを使用してスーパーユーザーかどうかをチェックするカスタムデコレータを定義
+def superuser_only(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_superuser:
+            return view_func(request, *args, **kwargs)
+        else:
+            return HttpResponse("アクセス権限がありません。")
+
+    return _wrapped_view
+
+# export_to_excelビューにカスタムデコレータを適用
+@superuser_only
 def export_to_excel(request):
     data = Review.objects.all()
 
