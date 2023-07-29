@@ -16,7 +16,7 @@ from dj_database_url import parse as bdurl
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,14 +24,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 if not os.path.exists(MEDIA_ROOT):
     os.makedirs(MEDIA_ROOT)
 
-
+env = environ.Env()
 environ.Env.read_env()
 # env.read_env(os.path.join(BASE_DIR,".env"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = 'django-insecure-)gp&(qg=6!)+cw4m_&4md7eefe*tz_1qm^fq8eon!5j6@99o)a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False# デプロイ時、Falseに修正
