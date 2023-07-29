@@ -135,35 +135,35 @@ def export_to_excel(request):
     result_df.reset_index(drop=True, inplace=True)
 
     # Excelファイルに出力（ファイル名を変更）
-    try:
-        file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
-        with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-            average_data.to_excel(writer, sheet_name='Average')
-            correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
-            result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # デモグラフィック分析結果を出力
+
+    file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
+    with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+        average_data.to_excel(writer, sheet_name='Average')
+        correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
+        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # デモグラフィック分析結果を出力
 
             # 散布図を追加していく処理
-            scatter_plots = {
-                '料理の満足度': numerical_data_df['food_satisfaction'],
-                '価格の満足度': numerical_data_df['price_satisfaction'],
-                '店の雰囲気': numerical_data_df['ambience_satisfaction'],
-                '接客態度': numerical_data_df['service_satisfaction'],
-            }
+        scatter_plots = {
+            '料理の満足度': numerical_data_df['food_satisfaction'],
+            '価格の満足度': numerical_data_df['price_satisfaction'],
+            '店の雰囲気': numerical_data_df['ambience_satisfaction'],
+            '接客態度': numerical_data_df['service_satisfaction'],
+        }
 
-            for label, data in scatter_plots.items():
-                img_data = create_scatter_plot(numerical_data_df['overall_satisfaction'], data, 'Overall Satisfaction', label)
-                # 新しいWorksheetを作成してそこに散布図を追加
-                scatter_sheet = writer.book.create_sheet(title=f'{label}_vs_Overall_Satisfaction')
-                scatter_sheet.add_image(Image(img_data), 'A1')
+        for label, data in scatter_plots.items():
+            img_data = create_scatter_plot(numerical_data_df['overall_satisfaction'], data, 'Overall Satisfaction', label)
+            # 新しいWorksheetを作成してそこに散布図を追加
+            scatter_sheet = writer.book.create_sheet(title=f'{label}_vs_Overall_Satisfaction')
+            scatter_sheet.add_image(Image(img_data), 'A1')
 
             # 相関行列のシートを開いてセルの色を設定
-            sheet = writer.book['CorrelationMatrix']
+        sheet = writer.book['CorrelationMatrix']
 
             # セルの色を設定するためのカスタム関数
-            def set_cell_color(cell, color):
+        def set_cell_color(cell, color):
                 cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
 
-            '''
+        '''
             for row in sheet.iter_rows(min_row=2, max_row=correlation_matrix.shape[0]+1, min_col=2, max_col=correlation_matrix.shape[1]+1):
                 for cell in row:
                     value = cell.value
@@ -181,36 +181,33 @@ def export_to_excel(request):
                         set_cell_color(cell, "FF8282")  # 正の相関でダークオレンジ色に設定
                         '''
 
-            week_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+3, column=2)  
-            week_correlation_cell.value = "相関係数-0.3以下-0.5より大きいで弱い負の相関"
-            set_cell_color(week_correlation_cell, "E0F8FF")  # 負の相関で薄い青色に設定
+        week_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+3, column=2)  
+        week_correlation_cell.value = "相関係数-0.3以下-0.5より大きいで弱い負の相関"
+        set_cell_color(week_correlation_cell, "E0F8FF")  # 負の相関で薄い青色に設定
 
-            normal_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+4, column=2)
-            normal_correlation_cell.value = "相関係数-0.5以下-0.7より大きいで普通の負の相関"
-            set_cell_color(normal_correlation_cell, "ADD8E6")  # 負の相関で青色に設定
+        normal_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+4, column=2)
+        normal_correlation_cell.value = "相関係数-0.5以下-0.7より大きいで普通の負の相関"
+        set_cell_color(normal_correlation_cell, "ADD8E6")  # 負の相関で青色に設定
 
-            strong_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+5, column=2)
-            strong_correlation_cell.value = "相関係数-0.7以下で強い負の相関"
-            set_cell_color(strong_correlation_cell, "6495ED")  # 負の相関で濃い青に設定
+        strong_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+5, column=2)
+        strong_correlation_cell.value = "相関係数-0.7以下で強い負の相関"
+        set_cell_color(strong_correlation_cell, "6495ED")  # 負の相関で濃い青に設定
 
-            strong_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+6, column=2)
-            strong_positive_correlation_cell.value = "相関係数0.7以上で強い正の相関"
-            set_cell_color(strong_positive_correlation_cell, "FF8282")  # 正の相関で濃い赤色に設定
+        strong_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+6, column=2)
+        strong_positive_correlation_cell.value = "相関係数0.7以上で強い正の相関"
+        set_cell_color(strong_positive_correlation_cell, "FF8282")  # 正の相関で濃い赤色に設定
 
-            normal_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+7, column=2)
-            normal_positive_correlation_cell.value = "相関係数0.5以上0.7未満で普通の正の相関"
-            set_cell_color(normal_positive_correlation_cell, "FFB6B6")  # 正の相関で赤色に設定
+        normal_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+7, column=2)
+        normal_positive_correlation_cell.value = "相関係数0.5以上0.7未満で普通の正の相関"
+        set_cell_color(normal_positive_correlation_cell, "FFB6B6")  # 正の相関で赤色に設定
 
-            weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
-            weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
-            set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
+        weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
+        weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
+        set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
         # ファイルをダウンロードさせるResponseオブジェクトを作成
-        with open(file_path, 'rb') as file:
+    with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
 
-        return response
-    # return HttpResponse("エクセルファイルの出力完了")
-    except Exception as e:
-        return HttpResponse(e)
+    return response
 

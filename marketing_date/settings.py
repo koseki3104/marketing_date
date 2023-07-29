@@ -141,6 +141,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SUPERUSER_NAME = config('SUPERUSER_NAME', default='admin')
-SUPERUSER_EMAIL = config('SUPERUSER_EMAIL', default='admin@example.com')
-SUPERUSER_PASSWORD = config('SUPERUSER_PASSWORD', default='password')
+SUPERUSER_NAME = config('SUPERUSER_NAME')
+SUPERUSER_EMAIL = config('SUPERUSER_EMAIL')
+SUPERUSER_PASSWORD = config('SUPERUSER_PASSWORD')
