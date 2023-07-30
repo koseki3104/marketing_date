@@ -113,40 +113,24 @@ def export_to_excel(request):
     # デモグラフィックデータを準備
     demographic_data = data_df[['gender', 'age']].copy()
     demographic_data['age'] = convert_to_age_group(demographic_data['age'])
-    # print(demographic_data)
+    demographic_data['gender'] = demographic_data['gender'].replace({'F': '女性', 'M': '男性'})
+
+    # 全ての年代と性別の組み合わせを含むDataFrameを作成
+    ages = [f'{i}代' for i in range(10, 90, 10)]
+    genders = ['男性', '女性']
+    all_combinations = pd.MultiIndex.from_product([genders, ages], names=['gender', 'age'])
+    all_demographics = pd.DataFrame(index=all_combinations).reset_index()
+
+# デモグラフィックデータと全ての組み合わせをマージして欠損値を補完
+    demographic_data = all_demographics.merge(demographic_data, how='left', on=['gender', 'age'])
+    demographic_data['人数'] = demographic_data['人数'].fillna(0)
+
     # デモグラフィック分析：各客層ごとの人数と全体の割合を計算
     demographic_analysis = demographic_data.groupby(['gender', 'age']).size()
     total_count = demographic_analysis.sum()
     demographic_analysis = demographic_analysis.reset_index(name='人数')
 
-    demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
-    # print(demographic_analysis)
-
-# すべての客層を表現するDataFrameを作成
-    genders = ['男性', '女性']
-    ages = [f'{i}代' for i in range(10, 90, 10)]
-    all_demographics = pd.DataFrame([(gender, age) for gender in genders for age in ages], columns=['gender', 'age'])
-
-# 欠損値を補完する
-    missing_rows = []
-    for gender in genders:
-        for age in ages:
-            if not ((demographic_analysis['gender'] == gender) & (demographic_analysis['age'] == age)).any():
-                missing_rows.append({'gender': gender, 'age': age, '人数': 0, '全体の割合': 0})
-
-# デモグラフィック分析結果をマージ
-    if missing_rows:
-        missing_df = pd.DataFrame(missing_rows)
-        demographic_analysis = pd.concat([demographic_analysis, missing_df])
-
-# デモグラフィック分析結果をマージ
-    result_df = pd.merge(all_demographics, demographic_analysis, how='left', on=['age', 'gender'])
-    result_df['人数'] = result_df['人数'].fillna(0)
-    result_df['全体の割合'] = result_df['全体の割合'].fillna(0)
-    # データを年代でソート
-    result_df['age'] = pd.Categorical(result_df['age'], categories=ages, ordered=True)
-    result_df.sort_values(['gender', 'age'], inplace=True)
-    result_df.reset_index(drop=True, inplace=True)
+    demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round
 
     # Excelファイルに出力（ファイル名を変更）
 
@@ -154,7 +138,7 @@ def export_to_excel(request):
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
         average_data.to_excel(writer, sheet_name='Average')
         correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
-        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # デモグラフィック分析結果を出力
+        demographic_analysis.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # デモグラフィック分析結果を出力
 
             # 散布図を追加していく処理
         scatter_plots = {
@@ -224,4 +208,3 @@ def export_to_excel(request):
             response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
 
     return response
-
