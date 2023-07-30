@@ -15,6 +15,7 @@ from decouple import config
 from dj_database_url import parse as bdurl
 from pathlib import Path
 from dotenv import load_dotenv
+from django.contrib.auth import authenticate
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -139,7 +140,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 SUPERUSER_NAME = config('SUPERUSER_NAME')
 SUPERUSER_EMAIL = config('SUPERUSER_EMAIL')
