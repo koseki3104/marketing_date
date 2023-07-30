@@ -121,15 +121,12 @@ def export_to_excel(request):
     demographic_analysis = demographic_analysis.reset_index(name='人数')
 
     demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
-    # print(demographic_analysis)
 
      # 全ての年代と性別の組み合わせを含むDataFrameを作成
     ages = [f'{i}代' for i in range(10, 90, 10)]
     genders = ['男性', '女性']
     all_combinations = pd.MultiIndex.from_product([genders, ages], names=['gender', 'age'])
     all_demographics = pd.DataFrame(index=all_combinations).reset_index()
-    # print(all_demographics)
-    
 
 # 欠損値を補完する
     missing_rows = []
@@ -137,7 +134,6 @@ def export_to_excel(request):
         for age in ages:
             if not ((demographic_analysis['gender'] == gender) & (demographic_analysis['age'] == age)).any():
                 missing_rows.append({'gender': gender, 'age': age, '人数': 0, '全体の割合': 0})
-    print(missing_rows)
 
 # デモグラフィック分析結果をマージ
     if missing_rows:
@@ -229,4 +225,3 @@ def export_to_excel(request):
             response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
 
     return response
-
