@@ -36,7 +36,6 @@ MARKETING_DATA_ANALYTICS
 「https://docs.google.com/spreadsheets/d/16zZ2HQu3WwCfQr7--Ev4fUUuqq0AuFfd63HK5G3_DGE/edit#gid=982722306」
 
 # 実装予定の機能
-・相関行列の表をデータの数値によってセルの色を変更する
 ・デモグラフィック分析の表をデータの数値によってセルの色を変更する
 ・クロス集計表分析、カイ二乗検定を表としてエクセルに出力（顧客と注文メニューの傾向を把握する為）
 
