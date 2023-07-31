@@ -178,8 +178,8 @@ def export_to_excel(request):
         def set_cell_color(cell, color):
                 cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
 
-        '''
-            for row in sheet.iter_rows(min_row=2, max_row=correlation_matrix.shape[0]+1, min_col=2, max_col=correlation_matrix.shape[1]+1):
+        
+        for row in sheet.iter_rows(min_row=2, max_row=correlation_matrix.shape[0]+1, min_col=2, max_col=correlation_matrix.shape[1]+1):
                 for cell in row:
                     value = cell.value
                     if value < -0.7:
@@ -194,7 +194,7 @@ def export_to_excel(request):
                         set_cell_color(cell, "FFB6B6")  # 正の相関で金色に設定
                     elif 0.7 <= value < 0.99:
                         set_cell_color(cell, "FF8282")  # 正の相関でダークオレンジ色に設定
-                        '''
+                        
 
         week_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+3, column=2)  
         week_correlation_cell.value = "相関係数-0.3以下-0.5より大きいで弱い負の相関"
