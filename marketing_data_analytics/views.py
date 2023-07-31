@@ -222,18 +222,32 @@ def export_to_excel(request):
         # デモグラフィック分析のシートを開いて最も人数が多いセルに色を設定
         demographic_sheet = writer.book['DemographicAnalysis']
 
-    # 最も人数が多いセルを特定
+        # 最も人数が多いセルを特定
         max_population = result_df['人数'].max()
         max_population_row = result_df[result_df['人数'] == max_population].index[0] + 2  # 行番号は1から始まるため+2する
 
-    # 最も人数が多いセルに色を付けるためのカスタム関数
+        # 最も人数が少ないセルを特定
+        min_population = result_df['人数'].min()
+        min_population_row = result_df[result_df['人数'] == min_population].index[0] + 2  # 行番号は1から始まるため+2する
+
+        # 最も人数が多いセルに色を付けるためのカスタム関数
         def set_max_population_cell_color(cell):
             cell.fill = PatternFill(start_color="FF8282", end_color="FF8282", fill_type="solid")
 
-    # 最も人数が多いセルに色を付ける
-        for col_idx in range(3, result_df.shape[1] + 1):
-            cell = demographic_sheet.cell(row=max_population_row, column=col_idx)
-            set_max_population_cell_color(cell)
+        # 最も人数が多いセルに色を付ける
+        for idx, row in result_df.iterrows():
+            if row['人数'] == max_population:
+                for col_idx in range(3, result_df.shape[1] + 1):
+                    cell = demographic_sheet.cell(row=idx + 2, column=col_idx)
+                    set_max_population_cell_color(cell)
+
+         # 最も人数が少ないセルに色を付ける
+
+        for idx, row in result_df.iterrows():
+            if row['人数'] == min_population:
+                for col_idx in range(3, result_df.shape[1] + 1):
+                    cell = demographic_sheet.cell(row=idx + 2, column=col_idx)
+                    cell.fill = PatternFill(start_color="ADD8E6", end_color="ADD8E6", fill_type="solid")
 
         # ファイルをダウンロードさせるResponseオブジェクトを作成
     with open(file_path, 'rb') as file:
