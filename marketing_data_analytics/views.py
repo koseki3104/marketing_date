@@ -150,7 +150,6 @@ def export_to_excel(request):
     result_df.reset_index(drop=True, inplace=True)
 
     # Excelファイルに出力（ファイル名を変更）
-
     file_path = os.path.join(settings.MEDIA_ROOT, 'data_analytics.xlsx')
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
         average_data.to_excel(writer, sheet_name='Average')
@@ -171,7 +170,7 @@ def export_to_excel(request):
             scatter_sheet = writer.book.create_sheet(title=f'{label}_vs_Overall_Satisfaction')
             scatter_sheet.add_image(Image(img_data), 'A1')
 
-            # 相関行列のシートを開いてセルの色を設定
+        # 相関行列のシートを開いてセルの色を設定
         sheet = writer.book['CorrelationMatrix']
 
             # セルの色を設定するためのカスタム関数
@@ -219,6 +218,23 @@ def export_to_excel(request):
         weak_positive_correlation_cell = sheet.cell(row=correlation_matrix.shape[0]+8, column=2)
         weak_positive_correlation_cell.value = "相関係数0.3以上0.5未満で弱い正の相関"
         set_cell_color(weak_positive_correlation_cell, "FFEBEB")  # 正の相関で薄い赤色に設定
+
+        # デモグラフィック分析のシートを開いて最も人数が多いセルに色を設定
+        demographic_sheet = writer.book['DemographicAnalysis']
+
+    # 最も人数が多いセルを特定
+        max_population = result_df['人数'].max()
+        max_population_row = result_df[result_df['人数'] == max_population].index[0] + 2  # 行番号は1から始まるため+2する
+
+    # 最も人数が多いセルに色を付けるためのカスタム関数
+        def set_max_population_cell_color(cell):
+            cell.fill = PatternFill(start_color="FF8282", end_color="FF8282", fill_type="solid")
+
+    # 最も人数が多いセルに色を付ける
+        for col_idx in range(3, result_df.shape[1] + 1):
+            cell = demographic_sheet.cell(row=max_population_row, column=col_idx)
+            set_max_population_cell_color(cell)
+
         # ファイルをダウンロードさせるResponseオブジェクトを作成
     with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
