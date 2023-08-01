@@ -249,6 +249,14 @@ def export_to_excel(request):
                     cell = demographic_sheet.cell(row=idx + 2, column=col_idx)
                     cell.fill = PatternFill(start_color="ADD8E6", end_color="ADD8E6", fill_type="solid")
 
+        max_cell = demographic_sheet.cell(row=result_df.shape[0] + 3, column=2)  
+        max_cell.value = "最も人数が多い客層"
+        set_cell_color(max_cell, "FF8282")  # 負の相関で薄い青色に設定
+
+        minimum_cell = demographic_sheet.cell(row=result_df.shape[0] + 4, column=2)
+        minimum_cell.value = "最も人数が少ない客層"
+        set_cell_color(minimum_cell, "ADD8E6")  # 負の相関で青色に設定
+
         # ファイルをダウンロードさせるResponseオブジェクトを作成
     with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
