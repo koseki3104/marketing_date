@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
 
-# 日本語フォントを指定してフォント設定
 plt.rcParams['font.sans-serif'] = ['Yu Gothic', 'Meiryo', 'Takao', 'IPAexGothic', 'IPAPGothic', 'VL PGothic', 'Noto Sans CJK JP']
-plt.rcParams['axes.unicode_minus'] = False  # マイナス記号が文字化けするのを防ぐ
+plt.rcParams['axes.unicode_minus'] = False  
 
-# 以降のコードはそのまま
 import matplotlib.font_manager as fm
 from django.shortcuts import render
 from openpyxl import Workbook, load_workbook
@@ -41,7 +39,7 @@ def create_scatter_plot(x_data, y_data, x_label, y_label):
     plt.savefig(img_data, format='png')
     plt.close()
 
-    img_data.seek(0)  # ファイルポインタを先頭に戻す
+    img_data.seek(0)
 
     return img_data
 
@@ -122,25 +120,25 @@ def export_to_excel(request):
 
     demographic_analysis['全体の割合'] = (demographic_analysis['人数'] / total_count * 100).round(2)
 
-     # 全ての年代と性別の組み合わせを含むDataFrameを作成
+    # 全ての年代と性別の組み合わせを含むDataFrameを作成
     ages = [f'{i}代' for i in range(10, 90, 10)]
     genders = ['男性', '女性']
     all_combinations = pd.MultiIndex.from_product([genders, ages], names=['gender', 'age'])
     all_demographics = pd.DataFrame(index=all_combinations).reset_index()
 
-# 欠損値を補完する
+    # 欠損値を補完する
     missing_rows = []
     for gender in genders:
         for age in ages:
             if not ((demographic_analysis['gender'] == gender) & (demographic_analysis['age'] == age)).any():
                 missing_rows.append({'gender': gender, 'age': age, '人数': 0, '全体の割合': 0})
 
-# デモグラフィック分析結果をマージ
+    # デモグラフィック分析結果をマージ
     if missing_rows:
         missing_df = pd.DataFrame(missing_rows)
         demographic_analysis = pd.concat([demographic_analysis, missing_df])
 
-# デモグラフィック分析結果をマージ
+    # デモグラフィック分析結果をマージ
     result_df = pd.merge(all_demographics, demographic_analysis, how='left', on=['age', 'gender'])
     result_df['人数'] = result_df['人数'].fillna(0)
     result_df['全体の割合'] = result_df['全体の割合'].fillna(0)
@@ -154,9 +152,9 @@ def export_to_excel(request):
     with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
         average_data.to_excel(writer, sheet_name='Average')
         correlation_matrix.to_excel(writer, sheet_name='CorrelationMatrix')
-        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)  # デモグラフィック分析結果を出力
+        result_df.to_excel(writer, sheet_name='DemographicAnalysis', index=False)
 
-            # 散布図を追加していく処理
+        # 散布図作成
         scatter_plots = {
             '料理の満足度': numerical_data_df['food_satisfaction'],
             '価格の満足度': numerical_data_df['price_satisfaction'],
@@ -173,7 +171,7 @@ def export_to_excel(request):
         # 相関行列のシートを開いてセルの色を設定
         sheet = writer.book['CorrelationMatrix']
 
-            # セルの色を設定するためのカスタム関数
+        # セルの色を設定するためのカスタム関数
         def set_cell_color(cell, color):
                 cell.fill = PatternFill(start_color=color, end_color=color, fill_type="solid")
 
@@ -224,11 +222,11 @@ def export_to_excel(request):
 
         # 最も人数が多いセルを特定
         max_population = result_df['人数'].max()
-        max_population_row = result_df[result_df['人数'] == max_population].index[0] + 2  # 行番号は1から始まるため+2する
+        max_population_row = result_df[result_df['人数'] == max_population].index[0] + 2 
 
         # 最も人数が少ないセルを特定
         min_population = result_df['人数'].min()
-        min_population_row = result_df[result_df['人数'] == min_population].index[0] + 2  # 行番号は1から始まるため+2する
+        min_population_row = result_df[result_df['人数'] == min_population].index[0] + 2 
 
         # 最も人数が多いセルに色を付けるためのカスタム関数
         def set_max_population_cell_color(cell):
@@ -241,7 +239,7 @@ def export_to_excel(request):
                     cell = demographic_sheet.cell(row=idx + 2, column=col_idx)
                     set_max_population_cell_color(cell)
 
-         # 最も人数が少ないセルに色を付ける
+        # 最も人数が少ないセルに色を付ける
 
         for idx, row in result_df.iterrows():
             if row['人数'] == min_population:
@@ -251,13 +249,13 @@ def export_to_excel(request):
 
         max_cell = demographic_sheet.cell(row=result_df.shape[0] + 3, column=2)  
         max_cell.value = "最も人数が多い客層"
-        set_cell_color(max_cell, "FF8282")  # 負の相関で薄い青色に設定
+        set_cell_color(max_cell, "FF8282")
 
         minimum_cell = demographic_sheet.cell(row=result_df.shape[0] + 4, column=2)
         minimum_cell.value = "最も人数が少ない客層"
-        set_cell_color(minimum_cell, "ADD8E6")  # 負の相関で青色に設定
+        set_cell_color(minimum_cell, "ADD8E6") 
 
-        # ファイルをダウンロードさせるResponseオブジェクトを作成
+    # ファイルをダウンロードさせるResponseオブジェクトを作成
     with open(file_path, 'rb') as file:
             response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=data_analytics.xlsx'
